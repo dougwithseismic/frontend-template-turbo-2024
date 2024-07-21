@@ -1,22 +1,31 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  UseQueryResult,
+} from "@tanstack/react-query";
 import { collectionApi } from "../api/collection-api";
-import { Collection } from "../types";
+import { Collection, NewCollection } from "../types";
 
 export const useCollectionOperations = () => {
   const queryClient = useQueryClient();
 
-  const collectionsQuery = useQuery({
+  const collectionsQuery = useQuery<Collection[], Error>({
     queryKey: ["collections"],
     queryFn: collectionApi.fetchCollections,
   });
 
-  const useCollectionQuery = (id: string) =>
+  const useCollectionQuery = (id: string): UseQueryResult<Collection, Error> =>
     useQuery({
       queryKey: ["collection", id],
       queryFn: () => collectionApi.fetchCollection(id),
     });
 
-  const createCollectionMutation = useMutation({
+  const createCollectionMutation = useMutation<
+    Collection,
+    Error,
+    NewCollection
+  >({
     mutationFn: collectionApi.createCollection,
     onSuccess: (newCollection) => {
       queryClient.setQueryData<Collection[]>(
@@ -26,7 +35,11 @@ export const useCollectionOperations = () => {
     },
   });
 
-  const updateCollectionMutation = useMutation({
+  const updateCollectionMutation = useMutation<
+    Collection,
+    Error,
+    Partial<Collection> & { id: string }
+  >({
     mutationFn: collectionApi.updateCollection,
     onSuccess: (updatedCollection) => {
       queryClient.setQueryData<Collection>(
@@ -45,7 +58,7 @@ export const useCollectionOperations = () => {
     },
   });
 
-  const deleteCollectionMutation = useMutation({
+  const deleteCollectionMutation = useMutation<void, Error, string>({
     mutationFn: collectionApi.deleteCollection,
     onSuccess: (_, deletedId) => {
       queryClient.removeQueries({ queryKey: ["collection", deletedId] });

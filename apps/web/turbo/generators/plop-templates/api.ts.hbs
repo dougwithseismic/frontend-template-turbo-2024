@@ -1,62 +1,92 @@
-
-import { {{pascalCase name}} } from '../types';
+// api/{{kebabCase name}}-api.ts
+import { z } from "zod";
+import { {{pascalCase name}}Schema, New{{pascalCase name}}Schema, {{pascalCase name}}, New{{pascalCase name}} } from '../types';
 
 const BASE_URL = '/api';
 
-async function handleResponse<T>(response: Response): Promise<T> {
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+class ApiError extends Error {
+  constructor(public status: number, message: string) {
+    super(message);
+    this.name = 'ApiError';
   }
-  return await response.json();
+}
+
+async function handleResponse<T>(response: Response, schema: z.ZodType<T>): Promise<T> {
+  if (!response.ok) {
+    throw new ApiError(response.status, `HTTP error! status: ${response.status}`);
+  }
+  const data = await response.json();
+  try {
+    return schema.parse(data);
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      throw new Error(`Validation error: ${error.message}`);
+    }
+    throw error;
+  }
+}
+
+async function handleApiCall<T>(apiCall: () => Promise<T>): Promise<T> {
+  try {
+    return await apiCall();
+  } catch (error) {
+    if (error instanceof ApiError || error instanceof z.ZodError) {
+      throw error;
+    }
+    console.error('Unexpected error:', error);
+    throw new Error('An unexpected error occurred. Please try again later.');
+  }
 }
 
 export const {{camelCase name}}Api = {
-  fetch{{pascalCase name}}s: async (): Promise<{{pascalCase name}}[]> => {
+  fetch{{pascalCase name}}s: () => handleApiCall(async () => {
     const response = await fetch(`${BASE_URL}/{{kebabCase name}}s`, {
       credentials: 'include',
     });
-    return handleResponse<{{pascalCase name}}[]>(response);
-  },
+    return handleResponse(response, z.array({{pascalCase name}}Schema));
+  }),
 
-  fetch{{pascalCase name}}: async (id: string): Promise<{{pascalCase name}}> => {
+  fetch{{pascalCase name}}: (id: string) => handleApiCall(async () => {
     const response = await fetch(`${BASE_URL}/{{kebabCase name}}s/${id}`, {
       credentials: 'include',
     });
-    return handleResponse<{{pascalCase name}}>(response);
-  },
+    return handleResponse(response, {{pascalCase name}}Schema);
+  }),
 
-  create{{pascalCase name}}: async (new{{pascalCase name}}: Omit<{{pascalCase name}}, 'id'>): Promise<{{pascalCase name}}> => {
+  create{{pascalCase name}}: (new{{pascalCase name}}: New{{pascalCase name}}) => handleApiCall(async () => {
+    const validatedData = New{{pascalCase name}}Schema.parse(new{{pascalCase name}});
     const response = await fetch(`${BASE_URL}/{{kebabCase name}}s`, {
       method: 'POST',
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(new{{pascalCase name}}),
+      body: JSON.stringify(validatedData),
     });
-    return handleResponse<{{pascalCase name}}>(response);
-  },
+    return handleResponse(response, {{pascalCase name}}Schema);
+  }),
 
-  update{{pascalCase name}}: async (updates: Partial<{{pascalCase name}}> & { id: string }): Promise<{{pascalCase name}}> => {
+  update{{pascalCase name}}: (updates: Partial<{{pascalCase name}}> & { id: string }) => handleApiCall(async () => {
     const { id, ...data } = updates;
+    const validatedData = {{pascalCase name}}Schema.partial().parse(data);
     const response = await fetch(`${BASE_URL}/{{kebabCase name}}s/${id}`, {
       method: 'PUT',
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(validatedData),
     });
-    return handleResponse<{{pascalCase name}}>(response);
-  },
+    return handleResponse(response, {{pascalCase name}}Schema);
+  }),
 
-  delete{{pascalCase name}}: async (id: string): Promise<void> => {
+  delete{{pascalCase name}}: (id: string) => handleApiCall(async () => {
     const response = await fetch(`${BASE_URL}/{{kebabCase name}}s/${id}`, {
       method: 'DELETE',
       credentials: 'include',
     });
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new ApiError(response.status, `HTTP error! status: ${response.status}`);
     }
-  },
+  }),
 };

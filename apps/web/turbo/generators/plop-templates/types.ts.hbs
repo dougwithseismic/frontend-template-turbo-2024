@@ -1,5 +1,14 @@
+import { z } from 'zod';
 
-export interface {{pascalCase name}} {
-  id: string;
-  // Add other properties specific to your {{pascalCase name}} here
-}
+export const {{pascalCase name}}Schema = z.object({
+  id: z.string(),
+  // Add other properties with their respective Zod validators
+  // For example:
+  // name: z.string().min(1).max(100),
+  // createdAt: z.string().datetime(),
+});
+
+export type {{pascalCase name}} = z.infer<typeof {{pascalCase name}}Schema>;
+
+export const New{{pascalCase name}}Schema = {{pascalCase name}}Schema.omit({ id: true });
+export type New{{pascalCase name}} = z.infer<typeof New{{pascalCase name}}Schema>;
