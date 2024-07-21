@@ -1,4 +1,7 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-exec < /dev/tty && pnpm cz --hook || true
+# Only use Commitizen when explicitly called
+if [ "$2" = "commit" ] && [ -z "${GIT_COMMIT_MESSAGE-}" ]; then
+  exec < /dev/tty && pnpm cz --hook || true
+fi
