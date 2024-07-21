@@ -1,6 +1,6 @@
 # Turborepo starter
 
-This is an official starter Turborepo.
+This is an official starter Turborepo template with some added batteries.
 
 ## Using this example
 

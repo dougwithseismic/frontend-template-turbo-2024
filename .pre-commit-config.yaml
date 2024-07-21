@@ -6,3 +6,10 @@ repos:
     - push
   repo: https://github.com/commitizen-tools/commitizen
   rev: v3.28.0
+- hooks:
+  - id: pre-commit-hook
+    name: Husky pre-commit
+    entry: npx husky run .husky/pre-commit
+    language: system
+    pass_filenames: false
+  repo: local
