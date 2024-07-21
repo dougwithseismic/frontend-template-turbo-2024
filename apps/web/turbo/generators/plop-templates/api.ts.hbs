@@ -1,0 +1,62 @@
+
+import { {{pascalCase name}} } from '../types';
+
+const BASE_URL = '/api';
+
+async function handleResponse<T>(response: Response): Promise<T> {
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  return await response.json();
+}
+
+export const {{camelCase name}}Api = {
+  fetch{{pascalCase name}}s: async (): Promise<{{pascalCase name}}[]> => {
+    const response = await fetch(`${BASE_URL}/{{kebabCase name}}s`, {
+      credentials: 'include',
+    });
+    return handleResponse<{{pascalCase name}}[]>(response);
+  },
+
+  fetch{{pascalCase name}}: async (id: string): Promise<{{pascalCase name}}> => {
+    const response = await fetch(`${BASE_URL}/{{kebabCase name}}s/${id}`, {
+      credentials: 'include',
+    });
+    return handleResponse<{{pascalCase name}}>(response);
+  },
+
+  create{{pascalCase name}}: async (new{{pascalCase name}}: Omit<{{pascalCase name}}, 'id'>): Promise<{{pascalCase name}}> => {
+    const response = await fetch(`${BASE_URL}/{{kebabCase name}}s`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(new{{pascalCase name}}),
+    });
+    return handleResponse<{{pascalCase name}}>(response);
+  },
+
+  update{{pascalCase name}}: async (updates: Partial<{{pascalCase name}}> & { id: string }): Promise<{{pascalCase name}}> => {
+    const { id, ...data } = updates;
+    const response = await fetch(`${BASE_URL}/{{kebabCase name}}s/${id}`, {
+      method: 'PUT',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    return handleResponse<{{pascalCase name}}>(response);
+  },
+
+  delete{{pascalCase name}}: async (id: string): Promise<void> => {
+    const response = await fetch(`${BASE_URL}/{{kebabCase name}}s/${id}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+  },
+};

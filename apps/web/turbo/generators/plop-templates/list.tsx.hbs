@@ -1,0 +1,23 @@
+// @@filename: apps/web/turbo/generators/plop-templates/list.tsx.hbs
+
+import React from 'react';
+import { use{{pascalCase name}}s } from '../context/{{kebabCase name}}-context';
+import { {{pascalCase name}}Item } from './{{kebabCase name}}-item';
+
+export const {{pascalCase name}}List: React.FC = () => {
+  const { {{camelCase name}}s, isLoading, error, create{{pascalCase name}} } = use{{pascalCase name}}s();
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+
+  return (
+    <div>
+      {{{{raw}}}}
+      {{{camelCase name}}s.map(({{camelCase name}}) => (
+        <{{pascalCase name}}Item key={{{camelCase name}}.id} {{camelCase name}}Id={{{camelCase name}}.id} />
+      ))}
+      {{{{/raw}}}}
+      <button onClick={() => create{{pascalCase name}}({ /* Add necessary properties */ })}>Add {{pascalCase name}}</button>
+    </div>
+  );
+};
