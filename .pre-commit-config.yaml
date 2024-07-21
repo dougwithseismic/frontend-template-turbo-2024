@@ -9,7 +9,7 @@ repos:
 - hooks:
   - id: pre-commit-hook
     name: Husky pre-commit
-    entry: npx husky run .husky/pre-commit
+    entry: pnpx husky run .husky/pre-commit
     language: system
     pass_filenames: false
   repo: local
