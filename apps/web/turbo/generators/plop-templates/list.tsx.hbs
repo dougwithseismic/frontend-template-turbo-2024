@@ -1,21 +1,41 @@
-import React from 'react';
-import { use{{pascalCase name}}s } from '../context/{{kebabCase name}}-context';
-import { {{pascalCase name}}Item } from './{{kebabCase name}}-item';
+import React from "react";
+import { {{pascalCase name}}Item } from "./{{kebabCase name}}-item";
+import { {{pascalCase name}} } from "../types";
 
-export const {{pascalCase name}}List: React.FC = () => {
-  const { {{camelCase name}}s, isLoading, error, create{{pascalCase name}} } = use{{pascalCase name}}s();
+interface {{pascalCase name}}ListProps {
+  isLoading: boolean;
+  hasError: boolean;
+  {{camelCase name}}s: {{pascalCase name}}[];
+  onUpdate?: (id: string, updates: Partial<{{pascalCase name}}>) => void;
+  onDelete?: (id: string) => void;
+}
 
+export const {{pascalCase name}}List: React.FC<{{pascalCase name}}ListProps> = ({
+  isLoading,
+  hasError,
+  {{camelCase name}}s,
+  onUpdate,
+  onDelete,
+}) => {
   if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
+  if (hasError) return <div>Error: Failed to load {{camelCase name}}s</div>;
 
   return (
     <div>
-      {{{{raw}}}}
-      {{{camelCase name}}s.map(({{camelCase name}}) => (
-        <{{pascalCase name}}Item key={{{camelCase name}}.id} {{camelCase name}}Id={{{camelCase name}}.id} />
+      { {{camelCase name}}s.length === 0 && (
+        <div>
+          <p>No {{camelCase name}}s found.</p>
+          <p>Create a new {{camelCase name}} to get started.</p>
+        </div>
+      )}
+      { {{camelCase name}}s.map({{camelCase name}} => (
+        <{{pascalCase name}}Item
+          key={ {{camelCase name}}.id}
+          {{camelCase name}}={ {{camelCase name}} }
+          onUpdate={onUpdate ? updates => onUpdate({{camelCase name}}.id, updates) : undefined}
+          onDelete={onDelete ? () => onDelete({{camelCase name}}.id) : undefined}
+        />
       ))}
-      {{{{/raw}}}}
-      <button onClick={() => create{{pascalCase name}}({ /* Add necessary properties */ })}>Add {{pascalCase name}}</button>
     </div>
-  );
+    );
 };

@@ -1,8 +1,20 @@
 import React from "react";
-import { useProducts } from "../context/product-context";
+import { Product } from "../types";
 
-export const ProductItem: React.FC<{ productId: string }> = ({ productId }) => {
-  const { useProductQuery, updateProduct, deleteProduct } = useProducts();
+interface ProductItemProps {
+  product: Product;
+  onUpdate?: (updates: Partial<Product>) => void;
+  onDelete?: () => void;
+}
 
-  return <div>{/* Display product properties here */}</div>;
+export const ProductItem: React.FC<ProductItemProps> = ({ product, onUpdate, onDelete }) => {
+  return (
+    <div className="flex flex-col items-center justify-center bg-neutral-100 text-neutral-600">
+      <h3>{product.name}</h3>
+      {onUpdate && (
+        <button onClick={() => onUpdate({ name: `Updated ${product.name}` })}>Update</button>
+      )}
+      {onDelete && <button onClick={onDelete}>Delete</button>}
+    </div>
+  );
 };

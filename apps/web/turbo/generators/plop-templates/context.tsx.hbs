@@ -1,18 +1,24 @@
 
-import React, { createContext, useContext } from 'react';
-import { use{{pascalCase name}}Operations } from '../hooks/use-{{kebabCase name}}-operations';
+import React, { createContext, useContext } from "react";
+import { use{{pascalCase name}}Operations } from "../hooks/use-{{kebabCase name}}-operations";
 
-const {{pascalCase name}}Context = createContext<ReturnType<typeof use{{pascalCase name}}Operations> | undefined>(undefined);
+export const {{pascalCase name}}Context = createContext<
+  ReturnType<typeof use{{pascalCase name}}Operations> | undefined
+>(undefined);
 
 export const {{pascalCase name}}Provider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const {{camelCase name}}Operations = use{{pascalCase name}}Operations();
-  return <{{pascalCase name}}Context.Provider value={ {{camelCase name}}Operations}>{children}</{{pascalCase name}}Context.Provider>;
+  return (
+    <{{pascalCase name}}Context.Provider value={ {{camelCase name}}Operations}>
+      {children}
+    </{{pascalCase name}}Context.Provider>
+  );
 };
 
 export const use{{pascalCase name}}s = () => {
   const context = useContext({{pascalCase name}}Context);
   if (context === undefined) {
-    throw new Error('use{{pascalCase name}}s must be used within a {{pascalCase name}}Provider');
+    throw new Error("use{{pascalCase name}}s must be used within a {{pascalCase name}}Provider");
   }
   return context;
 };

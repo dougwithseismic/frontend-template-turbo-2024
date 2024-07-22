@@ -1,5 +1,3 @@
-// @@filename: apps/web/turbo/generators/config.ts
-
 import type { PlopTypes } from "@turbo/gen";
 
 export default function generator(plop: PlopTypes.NodePlopAPI): void {
@@ -42,6 +40,16 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
         type: "add",
         path: "src/features/{{kebabCase name}}/components/{{kebabCase name}}-item.tsx",
         templateFile: "plop-templates/item.tsx.hbs",
+      },
+      {
+        type: "add",
+        path: "src/features/{{kebabCase name}}/components/{{kebabCase name}}-list.stories.tsx",
+        templateFile: "plop-templates/list.stories.tsx.hbs",
+      },
+      {
+        type: "add",
+        path: "src/features/{{kebabCase name}}/components/{{kebabCase name}}-item.stories.tsx",
+        templateFile: "plop-templates/item.stories.tsx.hbs",
       },
     ],
   });

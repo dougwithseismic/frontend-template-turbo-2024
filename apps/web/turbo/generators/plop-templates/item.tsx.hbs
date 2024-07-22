@@ -1,26 +1,24 @@
-import React from 'react';
-import { use{{pascalCase name}}s } from '../context/{{kebabCase name}}-context';
+import React from "react";
+import { {{pascalCase name}} } from "../types";
 
-export const {{pascalCase name}}Item: React.FC<{ {{camelCase name}}Id: string }> = ({ {{camelCase name}}Id }) => {
-  const { use{{pascalCase name}}Query, update{{pascalCase name}}, delete{{pascalCase name}} } = use{{pascalCase name}}s();
+interface {{pascalCase name}}ItemProps {
+  {{camelCase name}}: {{pascalCase name}};
+  onUpdate?: (updates: Partial<{{pascalCase name}}>) => void;
+  onDelete?: () => void;
+}
 
-  {{{{raw}}}}
-  const { data: {{camelCase name}}, isLoading, error } = use{{pascalCase name}}Query({{camelCase name}}Id);
-
-  if (isLoading) return <div>Loading {{camelCase name}}...</div>;
-  if (error) return <div>Error: {error.message}</div>;
-  if (!{{camelCase name}}) return null;
-  {{{{/raw}}}}
-
-  return (
-    <div>
-      {/* Display {{camelCase name}} properties here */}
-      {{{{raw}}}}
-      <button onClick={() => update{{pascalCase name}}({ id: {{camelCase name}}.id, /* Add properties to update */ })}>
-        Update {{pascalCase name}}
-      </button>
-      <button onClick={() => delete{{pascalCase name}}({{camelCase name}}.id)}>Delete {{pascalCase name}}</button>
-      {{{{/raw}}}}
+export const {{pascalCase name}}Item: React.FC<{{pascalCase name}}ItemProps> = ({
+  {{camelCase name}},
+  onUpdate,
+  onDelete,
+}) => {
+return (
+    <div className="flex flex-col items-center justify-center bg-neutral-100 text-neutral-600">
+      <h3>{ {{camelCase name}}.name}</h3>
+      {onUpdate && (
+        <button onClick={() => onUpdate({ name: `Updated ${ {{camelCase name}}.name}` })}>Update</button>
+      )}
+      {onDelete && <button onClick={onDelete}>Delete</button>}
     </div>
   );
-};
+}

@@ -1,7 +1,7 @@
 import React, { createContext, useContext } from "react";
 import { useProductOperations } from "../hooks/use-product-operations";
 
-const ProductContext = createContext<ReturnType<typeof useProductOperations> | undefined>(
+export const ProductContext = createContext<ReturnType<typeof useProductOperations> | undefined>(
   undefined,
 );
 

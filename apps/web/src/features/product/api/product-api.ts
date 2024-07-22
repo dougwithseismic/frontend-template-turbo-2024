@@ -1,4 +1,3 @@
-// api/product-api.ts
 import { z } from "zod";
 import { ProductSchema, NewProductSchema, Product, NewProduct } from "../types";
 
@@ -11,6 +10,7 @@ class ApiError extends Error {
   ) {
     super(message);
     this.name = "ApiError";
+    this.status = status;
   }
 }
 
