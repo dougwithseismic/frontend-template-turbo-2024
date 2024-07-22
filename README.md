@@ -16,9 +16,7 @@ This Turborepo includes the following packages/apps:
 
 ### Apps and Packages
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
+- `web`: A [Next.js](https://nextjs.org/) app with Tailwind
 - `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
 - `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
 
@@ -31,12 +29,60 @@ This Turborepo has some additional tools already setup for you:
 - [TypeScript](https://www.typescriptlang.org/) for static type checking
 - [ESLint](https://eslint.org/) for code linting
 - [Prettier](https://prettier.io) for code formatting
+- [Husky](https://typicode.github.io/husky/) for Git hooks
+- [Commitizen](https://commitizen-tools.github.io/commitizen/) for standardized commit messages
+- [Plop](https://plopjs.com/) for feature folder generation
+
+### Feature Folder Generation
+
+This Turborepo includes a custom generator for creating feature folders within the `web` app. To generate a new feature folder structure, follow these steps:
+
+1. Navigate to the `web` app directory:
+
+   ```bash
+   cd apps/web
+   ```
+
+2. Run the Plop generator:
+
+   ```bash
+   pnpm plop feature-folder
+   ```
+
+3. Enter the name of your feature when prompted.
+
+The generator will create the following folder structure for your feature:
+
+```markdown
+src/features/your-feature/
+├── api/
+│ └── your-feature-api.ts
+├── components/
+│ ├── your-feature-item.tsx
+│ └── your-feature-list.tsx
+├── context/
+│ └── your-feature-context.tsx
+├── hooks/
+│ └── use-your-feature-operations.ts
+└── types/
+└── index.ts
+```
+
+This structure includes:
+
+- API functions for CRUD operations and `react-query` fetching/mutations
+- React components for displaying items and lists
+- A context provider for state management
+- Custom hooks for data operations with `react-query`
+- TypeScript type definitions and Zod Schemas
+
+Each file is pre-populated with boilerplate code to help you get started quickly with your new feature.
 
 ### Build
 
 To build all apps and packages, run the following command:
 
-```
+```bash
 cd my-turborepo
 pnpm build
 ```
@@ -45,7 +91,7 @@ pnpm build
 
 To develop all apps and packages, run the following command:
 
-```
+```bash
 cd my-turborepo
 pnpm dev
 ```
@@ -56,7 +102,7 @@ Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo
 
 By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
 
-```
+```bash
 cd my-turborepo
 npx turbo login
 ```
@@ -65,7 +111,7 @@ This will authenticate the Turborepo CLI with your [Vercel account](https://verc
 
 Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
 
-```
+```bash
 npx turbo link
 ```
 
