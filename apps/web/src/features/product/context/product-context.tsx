@@ -1,19 +1,13 @@
 import React, { createContext, useContext } from "react";
 import { useProductOperations } from "../hooks/use-product-operations";
 
-const ProductContext = createContext<
-  ReturnType<typeof useProductOperations> | undefined
->(undefined);
+const ProductContext = createContext<ReturnType<typeof useProductOperations> | undefined>(
+  undefined,
+);
 
-export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const productOperations = useProductOperations();
-  return (
-    <ProductContext.Provider value={productOperations}>
-      {children}
-    </ProductContext.Provider>
-  );
+  return <ProductContext.Provider value={productOperations}>{children}</ProductContext.Provider>;
 };
 
 export const useProducts = () => {

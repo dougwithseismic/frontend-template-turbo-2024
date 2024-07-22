@@ -1,9 +1,4 @@
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  UseQueryResult,
-} from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient, UseQueryResult } from "@tanstack/react-query";
 import { productApi } from "../api/product-api";
 import { Product, NewProduct } from "../types";
 
@@ -23,7 +18,7 @@ export const useProductOperations = () => {
 
   const createProductMutation = useMutation<Product, Error, NewProduct>({
     mutationFn: productApi.createProduct,
-    onSuccess: (newProduct) => {
+    onSuccess: newProduct => {
       queryClient.setQueryData<Product[]>(["products"], (oldProducts = []) => [
         ...oldProducts,
         newProduct,
@@ -31,21 +26,12 @@ export const useProductOperations = () => {
     },
   });
 
-  const updateProductMutation = useMutation<
-    Product,
-    Error,
-    Partial<Product> & { id: string }
-  >({
+  const updateProductMutation = useMutation<Product, Error, Partial<Product> & { id: string }>({
     mutationFn: productApi.updateProduct,
-    onSuccess: (updatedProduct) => {
-      queryClient.setQueryData<Product>(
-        ["product", updatedProduct.id],
-        updatedProduct,
-      );
+    onSuccess: updatedProduct => {
+      queryClient.setQueryData<Product>(["product", updatedProduct.id], updatedProduct);
       queryClient.setQueryData<Product[]>(["products"], (oldProducts = []) =>
-        oldProducts.map((product) =>
-          product.id === updatedProduct.id ? updatedProduct : product,
-        ),
+        oldProducts.map(product => (product.id === updatedProduct.id ? updatedProduct : product)),
       );
     },
   });
@@ -55,7 +41,7 @@ export const useProductOperations = () => {
     onSuccess: (_, deletedId) => {
       queryClient.removeQueries({ queryKey: ["product", deletedId] });
       queryClient.setQueryData<Product[]>(["products"], (oldProducts = []) =>
-        oldProducts.filter((product) => product.id !== deletedId),
+        oldProducts.filter(product => product.id !== deletedId),
       );
     },
   });

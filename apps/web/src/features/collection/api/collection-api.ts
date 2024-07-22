@@ -1,18 +1,13 @@
 // api/collection-api.ts
 import { z } from "zod";
-import {
-  CollectionSchema,
-  NewCollectionSchema,
-  Collection,
-  NewCollection,
-} from "../types";
+import { CollectionSchema, NewCollectionSchema, Collection, NewCollection } from "../types";
 
 const BASE_URL = "/api";
 
 class ApiError extends Error {
   constructor(
     public status: number,
-    message: string
+    message: string,
   ) {
     super(message);
     this.name = "ApiError";
@@ -20,15 +15,9 @@ class ApiError extends Error {
   }
 }
 
-async function handleResponse<T>(
-  response: Response,
-  schema: z.ZodType<T>
-): Promise<T> {
+async function handleResponse<T>(response: Response, schema: z.ZodType<T>): Promise<T> {
   if (!response.ok) {
-    throw new ApiError(
-      response.status,
-      `HTTP error! status: ${response.status}`
-    );
+    throw new ApiError(response.status, `HTTP error! status: ${response.status}`);
   }
   const data = await response.json();
   try {
@@ -106,10 +95,7 @@ export const collectionApi = {
         credentials: "include",
       });
       if (!response.ok) {
-        throw new ApiError(
-          response.status,
-          `HTTP error! status: ${response.status}`
-        );
+        throw new ApiError(response.status, `HTTP error! status: ${response.status}`);
       }
     }),
 };

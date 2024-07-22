@@ -14,15 +14,9 @@ class ApiError extends Error {
   }
 }
 
-async function handleResponse<T>(
-  response: Response,
-  schema: z.ZodType<T>,
-): Promise<T> {
+async function handleResponse<T>(response: Response, schema: z.ZodType<T>): Promise<T> {
   if (!response.ok) {
-    throw new ApiError(
-      response.status,
-      `HTTP error! status: ${response.status}`,
-    );
+    throw new ApiError(response.status, `HTTP error! status: ${response.status}`);
   }
   const data = await response.json();
   try {
@@ -100,10 +94,7 @@ export const productApi = {
         credentials: "include",
       });
       if (!response.ok) {
-        throw new ApiError(
-          response.status,
-          `HTTP error! status: ${response.status}`,
-        );
+        throw new ApiError(response.status, `HTTP error! status: ${response.status}`);
       }
     }),
 };

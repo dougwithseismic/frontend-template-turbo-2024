@@ -1,9 +1,4 @@
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  UseQueryResult,
-} from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient, UseQueryResult } from "@tanstack/react-query";
 import { collectionApi } from "../api/collection-api";
 import { Collection, NewCollection } from "../types";
 
@@ -21,17 +16,13 @@ export const useCollectionOperations = () => {
       queryFn: () => collectionApi.fetchCollection(id),
     });
 
-  const createCollectionMutation = useMutation<
-    Collection,
-    Error,
-    NewCollection
-  >({
+  const createCollectionMutation = useMutation<Collection, Error, NewCollection>({
     mutationFn: collectionApi.createCollection,
-    onSuccess: (newCollection) => {
-      queryClient.setQueryData<Collection[]>(
-        ["collections"],
-        (oldCollections = []) => [...oldCollections, newCollection]
-      );
+    onSuccess: newCollection => {
+      queryClient.setQueryData<Collection[]>(["collections"], (oldCollections = []) => [
+        ...oldCollections,
+        newCollection,
+      ]);
     },
   });
 
@@ -41,19 +32,12 @@ export const useCollectionOperations = () => {
     Partial<Collection> & { id: string }
   >({
     mutationFn: collectionApi.updateCollection,
-    onSuccess: (updatedCollection) => {
-      queryClient.setQueryData<Collection>(
-        ["collection", updatedCollection.id],
-        updatedCollection
-      );
-      queryClient.setQueryData<Collection[]>(
-        ["collections"],
-        (oldCollections = []) =>
-          oldCollections.map((collection) =>
-            collection.id === updatedCollection.id
-              ? updatedCollection
-              : collection
-          )
+    onSuccess: updatedCollection => {
+      queryClient.setQueryData<Collection>(["collection", updatedCollection.id], updatedCollection);
+      queryClient.setQueryData<Collection[]>(["collections"], (oldCollections = []) =>
+        oldCollections.map(collection =>
+          collection.id === updatedCollection.id ? updatedCollection : collection,
+        ),
       );
     },
   });
@@ -62,10 +46,8 @@ export const useCollectionOperations = () => {
     mutationFn: collectionApi.deleteCollection,
     onSuccess: (_, deletedId) => {
       queryClient.removeQueries({ queryKey: ["collection", deletedId] });
-      queryClient.setQueryData<Collection[]>(
-        ["collections"],
-        (oldCollections = []) =>
-          oldCollections.filter((collection) => collection.id !== deletedId)
+      queryClient.setQueryData<Collection[]>(["collections"], (oldCollections = []) =>
+        oldCollections.filter(collection => collection.id !== deletedId),
       );
     },
   });

@@ -15,8 +15,7 @@ export const ProductList: React.FC = () => {
           createProduct({
             /* Add necessary properties */
           })
-        }
-      >
+        }>
         Add Product
       </button>
     </div>
