@@ -34,11 +34,11 @@
   "private": true,
   "scripts": {
     "build": "next build",
+    "build-storybook": "storybook build",
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "storybook": "storybook dev -p 6006"
   },
   "version": "0.1.0"
 }
