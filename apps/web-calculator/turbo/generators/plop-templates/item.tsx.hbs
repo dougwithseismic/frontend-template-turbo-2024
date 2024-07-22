@@ -1,0 +1,24 @@
+import React from "react";
+import { {{pascalCase name}} } from "../types";
+
+interface {{pascalCase name}}ItemProps {
+  {{camelCase name}}: {{pascalCase name}};
+  onUpdate?: (updates: Partial<{{pascalCase name}}>) => void;
+  onDelete?: () => void;
+}
+
+export const {{pascalCase name}}Item: React.FC<{{pascalCase name}}ItemProps> = ({
+  {{camelCase name}},
+  onUpdate,
+  onDelete,
+}) => {
+return (
+    <div className="flex flex-col items-center justify-center bg-neutral-100 text-neutral-600">
+      <h3>{ {{camelCase name}}.name}</h3>
+      {onUpdate && (
+        <button onClick={() => onUpdate({ name: `Updated ${ {{camelCase name}}.name}` })}>Update</button>
+      )}
+      {onDelete && <button onClick={onDelete}>Delete</button>}
+    </div>
+  );
+}

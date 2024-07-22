@@ -1,0 +1,56 @@
+import type { Meta, StoryObj } from "@storybook/react";
+import { {{pascalCase name}}List } from "./{{kebabCase name}}-list";
+
+const meta: Meta<typeof {{pascalCase name}}List> = {
+  title: "Features/{{pascalCase name}}/{{pascalCase name}}List",
+  component: {{pascalCase name}}List,
+  parameters: {
+    layout: "centered",
+  },
+  tags: ["autodocs"],
+  argTypes: {
+    isLoading: { control: "boolean" },
+    hasError: { control: "boolean" },
+    {{camelCase name}}s: { control: "object" },
+  },
+};
+
+export default meta;
+
+type Story = StoryObj<typeof {{pascalCase name}}List>;
+
+export const Default: Story = {
+  args: {
+    isLoading: false,
+    hasError: false,
+    {{camelCase name}}s: [
+      { id: "1", name: "Example 1" },
+      { id: "2", name: "Example 2" },
+      { id: "3", name: "Example 3" },
+    ],
+  },
+};
+
+export const Loading: Story = {
+  args: {
+    isLoading: true,
+    hasError: false,
+    {{camelCase name}}s: [],
+  },
+};
+
+export const Error: Story = {
+  args: {
+    isLoading: false,
+    hasError: true,
+    {{camelCase name}}s: [],
+  },
+};
+
+export const Empty: Story = {
+  args: {
+    isLoading: false,
+    hasError: false,
+    {{camelCase name}}s: [],
+  },
+};

@@ -1,0 +1,55 @@
+
+import { useQuery, useMutation, useQueryClient, UseQueryResult } from '@tanstack/react-query';
+import { {{camelCase name}}Api } from '../api/{{kebabCase name}}-api';
+import { {{pascalCase name}}, New{{pascalCase name}} } from '../types';
+
+export const use{{pascalCase name}}Operations = () => {
+  const queryClient = useQueryClient();
+
+  const {{camelCase name}}sQuery = useQuery<{{pascalCase name}}[], Error>({
+    queryKey: ['{{kebabCase name}}s'],
+    queryFn: {{camelCase name}}Api.fetch{{pascalCase name}}s,
+  });
+
+  const use{{pascalCase name}}Query = (id: string): UseQueryResult<{{pascalCase name}}, Error> => useQuery({
+    queryKey: ['{{kebabCase name}}', id],
+    queryFn: () => {{camelCase name}}Api.fetch{{pascalCase name}}(id),
+  });
+
+  const create{{pascalCase name}}Mutation = useMutation<{{pascalCase name}}, Error, New{{pascalCase name}}>({
+    mutationFn: {{camelCase name}}Api.create{{pascalCase name}},
+    onSuccess: (new{{pascalCase name}}) => {
+      queryClient.setQueryData<{{pascalCase name}}[]>(['{{kebabCase name}}s'], (old{{pascalCase name}}s = []) => [...old{{pascalCase name}}s, new{{pascalCase name}}]);
+    },
+  });
+
+  const update{{pascalCase name}}Mutation = useMutation<{{pascalCase name}}, Error, Partial<{{pascalCase name}}> & { id: string }>({
+    mutationFn: {{camelCase name}}Api.update{{pascalCase name}},
+    onSuccess: (updated{{pascalCase name}}) => {
+      queryClient.setQueryData<{{pascalCase name}}>(['{{kebabCase name}}', updated{{pascalCase name}}.id], updated{{pascalCase name}});
+      queryClient.setQueryData<{{pascalCase name}}[]>(['{{kebabCase name}}s'], (old{{pascalCase name}}s = []) =>
+        old{{pascalCase name}}s.map(({{camelCase name}}) => ({{camelCase name}}.id === updated{{pascalCase name}}.id ? updated{{pascalCase name}} : {{camelCase name}}))
+      );
+    },
+  });
+
+  const delete{{pascalCase name}}Mutation = useMutation<void, Error, string>({
+    mutationFn: {{camelCase name}}Api.delete{{pascalCase name}},
+    onSuccess: (_, deletedId) => {
+      queryClient.removeQueries({ queryKey: ['{{kebabCase name}}', deletedId] });
+      queryClient.setQueryData<{{pascalCase name}}[]>(['{{kebabCase name}}s'], (old{{pascalCase name}}s = []) =>
+        old{{pascalCase name}}s.filter(({{camelCase name}}) => {{camelCase name}}.id !== deletedId)
+      );
+    },
+  });
+
+  return {
+    {{camelCase name}}s: {{camelCase name}}sQuery.data ?? [],
+    isLoading: {{camelCase name}}sQuery.isLoading,
+    error: {{camelCase name}}sQuery.error,
+    use{{pascalCase name}}Query,
+    create{{pascalCase name}}: create{{pascalCase name}}Mutation.mutate,
+    update{{pascalCase name}}: update{{pascalCase name}}Mutation.mutate,
+    delete{{pascalCase name}}: delete{{pascalCase name}}Mutation.mutate,
+  };
+};

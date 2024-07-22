@@ -1,0 +1,28 @@
+// @@filename: apps/web/turbo/generators/plop-templates/item.stories.tsx.hbs
+
+import type { Meta, StoryObj } from "@storybook/react";
+import { {{pascalCase name}}Item } from "./{{kebabCase name}}-item";
+
+const meta: Meta<typeof {{pascalCase name}}Item> = {
+  title: "Features/{{pascalCase name}}/{{pascalCase name}}Item",
+  component: {{pascalCase name}}Item,
+  parameters: {
+    layout: "centered",
+  },
+  tags: ["autodocs"],
+  argTypes: {
+    {{camelCase name}}: { control: "object" },
+    onUpdate: { action: "onUpdate" },
+    onDelete: { action: "onDelete" },
+  },
+};
+
+export default meta;
+
+type Story = StoryObj<typeof {{pascalCase name}}Item>;
+
+export const Default: Story = {
+  args: {
+    {{camelCase name}}: { id: "1", name: "Example {{pascalCase name}}" },
+  },
+};
